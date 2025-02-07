@@ -42,12 +42,6 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 pb-20">
       <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-10">
         <div className="flex items-center justify-between px-4 h-16 max-w-2xl mx-auto">
-          <h1 className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-            Home
-          </h1>
-          <h1 className="text-xl font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-            THE BOX
-          </h1>
           <button
             className="p-2 hover:text-emerald-600 transition-colors"
             onClick={() => {
