@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Community from "./pages/Community";
 import AuthPage from "./pages/AuthPage";
@@ -28,14 +27,13 @@ function App() {
       <div className="min-h-screen bg-white pb-16">
         <Routes>
           {/* Authentication Page */}
-          <Route path="/auth" element={username ? <Navigate to={`/${username}`} replace /> : <AuthPage setUsername={setUsername} />} />
+          <Route path="/auth" element={username ? <Navigate to={`/${username}/dashboard`} replace /> : <AuthPage setUsername={setUsername} />} />
 
           {/* Protected Routes (Only accessible after login) */}
-          <Route path="/:username" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/:username/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/:username/community/:id" element={<ProtectedRoute><Community /></ProtectedRoute>} />
 
-          {/* Fallback Route - Redirect to Auth or Home */}
+          {/* Fallback Route - Redirect to Auth or Dashboard */}
           <Route path="*" element={username ? <Navigate to={`/${username}/dashboard`} replace /> : <Navigate to="/auth" replace />} />
         </Routes>
 
