@@ -1,107 +1,86 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { ArrowLeft, ArrowRight } from "lucide-react"; 
+import { useState } from "react";
 
-const ThoughtModal = ({ isOpen, onClose, username, endpoint }) => {
+interface ThoughtModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  username: string;
+  endpoint: string;
+}
+
+export default function ThoughtModal({ isOpen, onClose, username, endpoint }: ThoughtModalProps) {
   const [thought, setThought] = useState("");
-  const [restrictions, setRestrictions] = useState({
+  const [restrictions] = useState({
     repliesAllowed: true,
     postToCommunity: false,
     logVisible: true,
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!thought.trim()) {
-      alert('Please enter a message.');
-      return;
-    }
+  const handleSubmit = async () => {
+    if (!thought.trim()) return;
 
     try {
-      const response = await axios.post(`${endpoint}/addlogs`, {
-        userName: username,
-        message: thought,
-        restrictions,
+      const response = await fetch(`${endpoint}/addlogs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userName: username,
+          message: thought,
+          restrictions,
+        }),
       });
 
-      console.log('Log stored successfully:', response.data);
-      setThought('');
+      if (!response.ok) throw new Error("Failed to store log");
+
+      setThought("");
       onClose();
     } catch (error) {
-      console.error('Error storing log:', error.response?.data || error.message);
+      console.error("Error storing log:", error);
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900">Log Your Thought</h2>
-        <form onSubmit={handleSubmit}>
+    <div className="fixed inset-0 bg-white flex flex-col z-50">
+      {/* Top Navbar with Home/Box button */}
+      <div className="flex items-center justify-between px-6 py-4 shadow-md">
+        <button onClick={onClose} className="hover:opacity-75 transition-opacity">
+          <ArrowLeft className="h-6 w-6" />
+        </button>
+        <h1 className="text-lg font-semibold text-emerald-600">THE BOX</h1>
+        <div className="w-6" /> {/* Empty space to balance UI */}
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col flex-grow justify-center items-center px-6">
+        <h1 className="text-4xl font-semibold text-center mb-12 leading-tight">
+          Share your thoughts,
+          <br />
+          find your community
+        </h1>
+
+        <div className="relative w-full max-w-xl">
           <textarea
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-emerald-300"
-            rows={3}
-            placeholder="Share your thoughts..."
             value={thought}
             onChange={(e) => setThought(e.target.value)}
+            placeholder="Write your thought (only text)"
+            className="w-full min-h-[100px] p-4 bg-[#FAF6F0] text-base placeholder:text-gray-500 border-none rounded-lg focus:outline-none focus:ring-0"
           />
-          <div className="mt-4">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={restrictions.repliesAllowed}
-                onChange={(e) =>
-                  setRestrictions((prev) => ({
-                    ...prev,
-                    repliesAllowed: e.target.checked,
-                  }))
-                }
-              />
-              <span className="ml-2">Allow replies</span>
-            </label>
-            <label className="flex items-center mt-2">
-              <input
-                type="checkbox"
-                checked={restrictions.postToCommunity}
-                onChange={(e) =>
-                  setRestrictions((prev) => ({
-                    ...prev,
-                    postToCommunity: e.target.checked,
-                  }))
-                }
-              />
-              <span className="ml-2">Post to Community</span>
-            </label>
-            <label className="flex items-center mt-2">
-              <input
-                type="checkbox"
-                checked={restrictions.logVisible}
-                onChange={(e) =>
-                  setRestrictions((prev) => ({
-                    ...prev,
-                    logVisible: e.target.checked,
-                  }))
-                }
-              />
-              <span className="ml-2">Visible in Log</span>
-            </label>
-          </div>
           <button
-            type="submit"
-            className="mt-4 bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition"
+            onClick={handleSubmit}
+            disabled={!thought.trim()}
+            className={`absolute bottom-3 right-3 p-2 h-auto rounded-full transition-colors ${
+              thought.trim() ? "bg-emerald-500 text-white hover:bg-emerald-600" : "bg-gray-400 text-gray-200"
+            }`}
           >
-            Submit
+            <ArrowRight className="h-5 w-5" />
           </button>
-        </form>
-        <button
-          className="mt-4 text-red-500 hover:underline"
-          onClick={onClose}
-        >
-          Close
-        </button>
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default ThoughtModal;
