@@ -39,9 +39,12 @@ const Dashboard = () => {
   }, [username]); // Re-fetch data if the username changes
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 pb-20">
+    <div className="h-[calc(100vh-64px)] bg-gradient-to-b from-white to-gray-50 pb-20">
       <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-10">
         <div className="flex items-center justify-between px-4 h-16 max-w-2xl mx-auto">
+        <h1 className="text-xl font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            THE BOX
+          </h1>
           <button
             className="p-2 hover:text-emerald-600 transition-colors"
             onClick={() => {
@@ -52,30 +55,31 @@ const Dashboard = () => {
           >
             <LogOut className="w-6 h-6" />
           </button>
+          
         </div>
       </header>
         {/* Entry Section */}
         <main className="max-w-2xl mx-auto p-4 pt-20">
-        <div className="mb-12">
-          <div className="overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
-            <div className="flex flex-col gap-4">
-              <h1 className="text-2xl font-bold text-emerald-600">The Box</h1>
+        <div className="mb-8 flex justify-between items-center">
+          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+              <img 
+                    src="/placeholder.svg?height=32&width=32" 
+                    alt="Avatar" 
+                    className="w-full h-full object-cover" 
+                  />
+              </div>
               <button
-                onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-3 bg-[#FAF6F0] rounded-xl p-4 hover:bg-[#FAF6F0]/80 transition-colors"
-              >
-                <div className="w-12 h-12 rounded-full overflow-hidden">
-                  <img src="/placeholder.svg?height=48&width=48" alt="Avatar" className="w-full h-full object-cover" />
-                </div>
-                <span className="text-[#8B7355] text-sm">Click here to log your thoughts</span>
-              </button>
-            </div>
+      onClick={() => setIsModalOpen(true)}
+      className="flex-1 bg-[#FAF6F0] rounded-lg p-3 text-left hover:bg-[#FAF6F0]/80 transition-colors"
+    >
+      <span className="text-[#8B7355] text-sm">Click here to log your thoughts</span>
+    </button>
           </div>
-        </div>
+
         {/* Your Boxes Section */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-medium text-gray-900">Your Boxes</h2>
+            <h2 className="text-lg font-medium text-gray-900">{username} Boxes</h2>
             <div className="flex gap-2">
               <button className="p-1.5 rounded-full bg-white shadow-sm hover:bg-gray-50 transition-colors">
                 <ChevronLeft className="w-4 h-4" />
