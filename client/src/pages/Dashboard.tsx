@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Share, ChevronRight, ChevronLeft, LogOut } from 'lucide-react';
+import { ChevronRight, ChevronLeft, LogOut } from 'lucide-react';
 import axios from 'axios';
+import ThoughtModal from '../components/ThoughtModal'; // Import the ThoughtModal component
 
 const Dashboard = () => {
   const [username, setUsername] = useState(localStorage.getItem("username"));
@@ -9,6 +10,7 @@ const Dashboard = () => {
   const [boxes, setBoxes] = useState([]); // State to store boxes
   const [loading, setLoading] = useState(true); // State to track loading status
   const [error, setError] = useState(null); // State to handle errors
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
   const nav = useNavigate();
 
   const endpoint = import.meta.env.VITE_RUNNING_ENV === 'dev' ? import.meta.env.VITE_DEV_API_URL : import.meta.env.VITE_PROD_API_URL;
@@ -37,11 +39,11 @@ const Dashboard = () => {
   }, [username]); // Re-fetch data if the username changes
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 pb-20">
+    <div className="h-[calc(100vh-64px)] bg-gradient-to-b from-white to-gray-50 pb-20">
       <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-10">
         <div className="flex items-center justify-between px-4 h-16 max-w-2xl mx-auto">
-          <h1 className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-            Home
+        <h1 className="text-xl font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            THE BOX
           </h1>
           <button
             className="p-2 hover:text-emerald-600 transition-colors"
@@ -53,14 +55,31 @@ const Dashboard = () => {
           >
             <LogOut className="w-6 h-6" />
           </button>
+          
         </div>
       </header>
+        {/* Entry Section */}
+        <main className="max-w-2xl mx-auto p-4 pt-20">
+        <div className="mb-8 flex justify-between items-center">
+          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+              <img 
+                    src="/placeholder.svg?height=32&width=32" 
+                    alt="Avatar" 
+                    className="w-full h-full object-cover" 
+                  />
+              </div>
+              <button
+      onClick={() => setIsModalOpen(true)}
+      className="flex-1 bg-[#FAF6F0] rounded-lg p-3 text-left hover:bg-[#FAF6F0]/80 transition-colors"
+    >
+      <span className="text-[#8B7355] text-sm">Click here to log your thoughts</span>
+    </button>
+          </div>
 
-      <main className="pt-20 px-4 max-w-2xl mx-auto">
         {/* Your Boxes Section */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-medium text-gray-900">Your Boxes</h2>
+            <h2 className="text-lg font-medium text-gray-900">{username} Boxes</h2>
             <div className="flex gap-2">
               <button className="p-1.5 rounded-full bg-white shadow-sm hover:bg-gray-50 transition-colors">
                 <ChevronLeft className="w-4 h-4" />
@@ -163,6 +182,14 @@ const Dashboard = () => {
           )}
         </div>
       </main>
+
+      {/* Thought Modal */}
+      <ThoughtModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        username={username}
+        endpoint={endpoint}
+      />
     </div>
   );
 };

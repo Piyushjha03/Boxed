@@ -131,7 +131,7 @@ app.post("/auth", async (req, res) => {
 // Endpoint to store a message in the logs array
 app.post("/addlogs", async (req, res) => {
   try {
-    const { userName, message } = req.body;
+    const { userName, message, restrictions } = req.body;
 
     if (!userName) {
       return res.status(400).json({ message: "Username is required" });
@@ -160,6 +160,7 @@ app.post("/addlogs", async (req, res) => {
         await cron_job_ai({
           userName,
           message,
+          restrictions, // Pass restrictions to the AI job
         });
       } catch (err) {
         console.error("Background AI job failed:", err);

@@ -54,6 +54,23 @@ AiRouter.post("/chat", async (req, res) => {
   }
 });
 
+// export async function cron_job_ai({ userName, message, restrictions }) {
+//   // Process the message and restrictions
+//   console.log("Processing AI job with restrictions:", restrictions);
+
+//   // Example: Use OpenAI API to process the message
+//   const response = await openai.createCompletion({
+//     model: "text-davinci-003",
+//     prompt: `User: ${userName}\nMessage: ${message}\nRestrictions: ${JSON.stringify(restrictions)}`,
+//     max_tokens: 100,
+//   });
+
+//   console.log("AI response:", response.data.choices[0].text);
+
+//   // Further processing based on the AI response and restrictions
+//   // ...
+// }
+
 export async function cron_job_ai(demo_obj) {
   try {
     const all_boxes = await getAllBoxes(); // Returns array of box names
